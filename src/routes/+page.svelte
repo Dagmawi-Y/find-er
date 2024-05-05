@@ -1,4 +1,9 @@
 <h1>Welcome to SvelteKit</h1>
 
-<a href="/test">Test</a>
+<a href="/hello">Go to hello</a>
 
+<style>
+  a {
+    text-decoration: none;
+  }
+</style>
