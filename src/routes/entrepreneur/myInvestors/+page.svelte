@@ -25,11 +25,6 @@
       Then search the investors and get nudging!"
           />
           <InvestorCard />
-          <InvestorCard />
-          <InvestorCard />
-          <InvestorCard />
-          <InvestorCard />
-          <InvestorCard />
         </SimpleGrid>
       </div>
     </Tabs.Tab>
@@ -49,11 +44,6 @@
   Then search the investors and get nudging!"
         />
         <InvestorCard />
-        <InvestorCard />
-        <InvestorCard />
-        <InvestorCard />
-        <InvestorCard />
-        <InvestorCard />
       </SimpleGrid></Tabs.Tab
     >
     <Tabs.Tab label="Nudged" icon={MagicWand}
@@ -71,11 +61,6 @@
           text="You don't have any investors interested yet. Make sure your pitch is well filled in.
   Then search the investors and get nudging!"
         />
-        <InvestorCard />
-        <InvestorCard />
-        <InvestorCard />
-        <InvestorCard />
-        <InvestorCard />
         <InvestorCard />
       </SimpleGrid></Tabs.Tab
     >
