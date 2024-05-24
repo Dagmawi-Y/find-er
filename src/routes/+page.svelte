@@ -13,9 +13,13 @@
   import Footer from "$lib/components/footer/Footer.svelte";
   import { Splide, SplideSlide } from "@splidejs/svelte-splide";
   import "@splidejs/svelte-splide/css";
+  import { getIndustries } from "$lib/api";
+  import { onMount } from "svelte";
 
   let selectedOption = "Invest";
   let showAllIndustries = false;
+
+  let industries: any = [];
 
   const handleOptionChange = (option: any) => {
     selectedOption = option;
@@ -24,6 +28,15 @@
   const toggleIndustries = () => {
     showAllIndustries = !showAllIndustries;
   };
+
+  onMount(async () => {
+    try {
+      const data = await getIndustries();
+      industries = data;
+    } catch (error) {
+      console.error("Error fetching industries:", error);
+    }
+  });
 </script>
 
 <div>
@@ -213,7 +226,7 @@
       ]}
       cols={3}
     >
-      {#each Array(showAllIndustries ? 16 : 6) as _, index (index)}
+      {#each industries.slice(0, showAllIndustries ? industries.length : 6) as industry, index (industry.id)}
         <div
           class="transition-all duration-500 ease-in-out"
           class:opacity-0={!showAllIndustries && index >= 6}
@@ -222,8 +235,8 @@
           class:scale-100={showAllIndustries || index < 6}
         >
           <IndustryCard
-            imageSrc={"https://www.angelinvestmentnetwork.co.uk/images/industries/8.jpg"}
-            industryName={"Software"}
+            imageSrc={industry.industry_image_url}
+            industryName={industry.industry_name}
           />
         </div>
       {/each}

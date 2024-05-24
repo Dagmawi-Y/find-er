@@ -3,7 +3,7 @@
   import { CirclePlusSolid } from "flowbite-svelte-icons";
 
   export let text = "Welcome mate, Click the big + to get your ideas noticed";
-  export let link = "/entrepreneur/addPitch";
+  export let link = "";
   export let height = "300px";
   export let width = "w-96";
 

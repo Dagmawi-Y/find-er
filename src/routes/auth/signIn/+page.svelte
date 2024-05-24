@@ -118,7 +118,7 @@
                   aria-describedby="remember"
                   type="checkbox"
                   class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
-                  required={true}
+                  required={false}
                 />
               </div>
               <div class="ml-3 text-sm">

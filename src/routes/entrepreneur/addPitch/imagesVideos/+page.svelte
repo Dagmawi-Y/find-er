@@ -3,3 +3,4 @@
 
   export let data: PageData;
 </script>
+<h2>Images Videos</h2>
