@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .glow-primary {
+    @apply shadow-lg shadow-primary/20;
+  }
+}
