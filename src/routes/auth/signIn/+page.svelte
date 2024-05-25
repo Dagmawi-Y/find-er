@@ -138,7 +138,7 @@
           >
             {#if formSubmitted}
               <span class="spinner-border spinner-border-sm" role="status" />
-              <span class="sr-only">Loading...</span>
+              <span class="loading loading-spinner text-secondary"></span>
             {:else}
               Sign In
             {/if}

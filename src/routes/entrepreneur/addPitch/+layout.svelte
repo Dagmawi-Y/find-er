@@ -48,8 +48,11 @@
 </nav>
 
 <AnimatedRoute>
-  <main class="card w-4/6 bg-neutral text-neutral-content mx-auto">
-    <div class="card-body items-center text-center">
+  <main
+    class="card text-neutral-content mx-auto bg-slate-100 w-full md:w-1/2 overflow-y-scroll no-scrollbar p-0 shadow-md"
+    style="max-height: 500px;"
+  >
+    <div class="card-body items-center text-center py-5">
       <slot />
     </div>
   </main>

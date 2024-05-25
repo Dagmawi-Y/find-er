@@ -32,7 +32,7 @@
     ]}
     cols={3}
   >
-    <AddCard link="/entrepreneur/addPitch" />
+    <AddCard link="/entrepreneur/addPitch/companyInfo" />
     {#each startups as startup}
       <StartupCard
         imageUrl={startup.images_videos?.find(

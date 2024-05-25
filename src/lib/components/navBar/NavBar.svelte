@@ -1,5 +1,6 @@
 <script lang="ts">
   import MainLogo from "$lib/components/mainLogo/MainLogo.svelte";
+  import Icon from "@iconify/svelte";
   import { fly } from "svelte/transition";
   let isSticky = true;
 
@@ -48,37 +49,70 @@
           <li><a>Help</a></li>
         </ul>
       </div>
-      <MainLogo imageSource="images/logo.png" showText={true} />
+      <MainLogo
+        imageSource="https://i.ibb.co/bBVsZTy/logo.png"
+        showText={true}
+      />
     </div>
     <div class="navbar-end hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
         <li>
           <details>
-            <summary>Invest</summary>
+            <summary
+              >Invest<Icon
+                icon="noto:money-bag"
+                font-size="22"
+                class=" text-secondary"
+              /></summary
+            >
             <ul class="p-2">
-              <li><a>Submenu 1</a></li>
-              <li><a>Submenu 2</a></li>
+              <li><a>Explore</a></li>
+              <hr />
+              <li><a>Search</a></li>
+              <hr />
+              <li><a>Investor App</a></li>
             </ul>
           </details>
         </li>
         <li>
           <details>
-            <summary>Fundraise</summary>
+            <summary
+              >Fundraise<Icon
+                icon="ri:funds-box-fill"
+                font-size="22"
+                class=" text-secondary"
+              /></summary
+            >
             <ul class="p-2">
-              <li><a>Submenu 1</a></li>
-              <li><a>Submenu 2</a></li>
+              <li><a>My Startups</a></li>
+              <hr />
+              <li><a>My Investors</a></li>
+              <hr />
+              <li><a>Investor Search</a></li>
+              <hr />
+              <li><a>Add Startup</a></li>
             </ul>
           </details>
         </li>
         <li>
           <details>
-            <summary>Help</summary>
+            <summary
+              >Help<Icon
+                icon="material-symbols:contact-support"
+                font-size="22"
+                class=" text-primary-dark"
+              /></summary
+            >
             <ul class="p-2">
-              <li><a>Submenu 1</a></li>
-              <li><a>Submenu 2</a></li>
+              <li><a>How it works?</a></li>
+              <hr />
+              <li><a>FAQs</a></li>
+              <hr />
+              <li><a>Learn</a></li>
             </ul>
           </details>
         </li>
+        <li></li>
       </ul>
       <a href="auth/signIn" class="btn mr-2">Login</a>
       <a href="auth/signUp" class="btn bg-primary">Signup</a>

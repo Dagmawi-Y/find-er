@@ -267,7 +267,7 @@
             {#if form_submitted}
               <span class="spinner-border spinner-border-sm" role="status"
               ></span>
-              <span class="sr-only">Loading...</span>
+              <span class="loading loading-spinner text-secondary"></span>
             {:else}
               Create an account
             {/if}
