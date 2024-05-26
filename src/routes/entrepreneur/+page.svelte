@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import type { PageData } from "./$types";
   import NavBar from "$lib/components/navBar/NavBar.svelte";
   import MyPitches from "../entrepreneur/myPitches/+page.svelte";
@@ -68,4 +68,4 @@
   .tab-content {
     min-height: 200px; /* Adjust as needed */
   }
-</style>
+</style> -->
