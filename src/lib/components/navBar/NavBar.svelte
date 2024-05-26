@@ -15,7 +15,7 @@
 {#if isSticky}
   <nav
     transition:fly={{ y: -50, duration: 200 }}
-    class="sticky top-0 z-10 navbar bg-base-100 mb-0 h-8 py-7 bg-slate-200 shadow-md"
+    class="sticky top-0 z-10 navbar bg-base-100 mb-0 h-8 py-7 bg-slate-200 shadow-md px-1 sm:px-28"
   >
     <div class="navbar-start">
       <div class="dropdown">

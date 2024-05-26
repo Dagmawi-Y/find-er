@@ -48,6 +48,7 @@
 		"nprogress": "^0.2.0",
 		"radix-icons-svelte": "^1.2.1",
 		"socket.io-client": "^4.7.5",
+		"svelte-motion": "^0.12.2",
 		"svelte-toasts": "^1.1.2",
 		"svelte-typewriter": "^3.2.3",
 		"tailwind-merge": "^2.3.0",
