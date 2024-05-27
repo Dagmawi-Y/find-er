@@ -4,7 +4,7 @@
 
   export let text = "Welcome mate, Click the big + to get your ideas noticed";
   export let link = "";
-  export let height = "300px";
+  export let height = "500px";
   export let width = "w-96";
 
   let card: HTMLElement;

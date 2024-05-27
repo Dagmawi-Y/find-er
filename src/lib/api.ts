@@ -1,6 +1,8 @@
 // src/lib/api.ts
 import axiosInstance from "./axios";
+import FormData from "form-data";
 
+import fs from "fs";
 // import { API_BASE_URL } from "$env/static/private";
 
 let API_BASE_URL = "http://localhost:3333/api/v1";
@@ -261,12 +263,26 @@ export async function expressStartupInterest(startupId: string) {
   return response.data;
 }
 
-export async function updateStartupTeam(startupId: string, data: any) {
-  const response = await axiosInstance.put(
-    `${API_BASE_URL}/startups/${startupId}/team`,
-    data,
-  );
-  return response.data;
+// export async function updateStartupTeam(startupId: string, data: any) {
+//   const response = await axiosInstance.put(
+//     `${API_BASE_URL}/startups/${startupId}/team`,
+//     data,
+//   );
+//   return response.data;
+// }
+
+export async function addTeamMemberWithImage(data: FormData): Promise<any> {
+  try {
+    const response = await axiosInstance.post("/team-member", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading team member:", error);
+    throw error;
+  }
 }
 
 // export async function updateStartupDealDetails(startupId: string, data: any) {
@@ -444,17 +460,25 @@ export async function getUserConversations() {
 
 // Lookups endpoints
 export async function addIndustry(data: any) {
-  const response = await axiosInstance.post(`${API_BASE_URL}/lookups/industry`, data);
+  const response = await axiosInstance.post(
+    `${API_BASE_URL}/lookups/industry`,
+    data,
+  );
   return response.data;
 }
 
 export async function getIndustries() {
-  const response = await axiosInstance.get(`${API_BASE_URL}/lookups/industries`);
+  const response = await axiosInstance.get(
+    `${API_BASE_URL}/lookups/industries`,
+  );
   return response.data;
 }
 
 export async function addStage(data: any) {
-  const response = await axiosInstance.post(`${API_BASE_URL}/lookups/stage`, data);
+  const response = await axiosInstance.post(
+    `${API_BASE_URL}/lookups/stage`,
+    data,
+  );
   return response.data;
 }
 
@@ -464,21 +488,31 @@ export async function getStages() {
 }
 
 export async function addInvestorRole(data: any) {
-  const response = await axiosInstance.post(`${API_BASE_URL}/lookups/investor-role`, data);
+  const response = await axiosInstance.post(
+    `${API_BASE_URL}/lookups/investor-role`,
+    data,
+  );
   return response.data;
 }
 
 export async function getInvestorRoles() {
-  const response = await axiosInstance.get(`${API_BASE_URL}/lookups/investor-roles`);
+  const response = await axiosInstance.get(
+    `${API_BASE_URL}/lookups/investor-roles`,
+  );
   return response.data;
 }
 
 export async function addTaxRelief(data: any) {
-  const response = await axiosInstance.post(`${API_BASE_URL}/lookups/tax-relief`, data);
+  const response = await axiosInstance.post(
+    `${API_BASE_URL}/lookups/tax-relief`,
+    data,
+  );
   return response.data;
 }
 
 export async function getTaxReliefs() {
-  const response = await axiosInstance.get(`${API_BASE_URL}/lookups/tax-reliefs`);
+  const response = await axiosInstance.get(
+    `${API_BASE_URL}/lookups/tax-reliefs`,
+  );
   return response.data;
 }

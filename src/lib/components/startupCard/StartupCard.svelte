@@ -31,8 +31,8 @@
       <MapPinAltSolid class=" text-primary size-5" />
       <p>{location}</p>
     </div>
-    <div class="divider bg-primary p-0 m-0 h-1/6 border-primary my-1"></div>
-    <p class=" font-normal">{description.slice(0, 100) + "..."}</p>
+    <div class="divider bg-primary p-0 m-0 h-0.5 border-primary my-1"></div>
+    <p class=" font-normal">{description}</p>
     <List tag="ol" class="space-y-2 text-xs  my-3  font-bold">
       {#each highlights as highlight}
         <Li>

@@ -1,9 +1,9 @@
 <script>
   import AddCard from "$lib/components/addCard/AddCard.svelte";
-  import AddStartupCard from "$lib/components/addCard/AddCard.svelte";
   import StartupCard from "$lib/components/startupCard/StartupCard.svelte";
   import { SimpleGrid } from "@svelteuidev/core";
   import { getUserStartups } from "$lib/api";
+  import { onMount } from "svelte";
 
   /**
    * @type {any[]}
@@ -11,6 +11,7 @@
   let startups = [];
 
   // Fetch startups when the component is mounted
+
   async function fetchStartups() {
     try {
       startups = await getUserStartups();
@@ -19,7 +20,9 @@
     }
   }
 
-  fetchStartups();
+  onMount(() => {
+    fetchStartups();
+  });
 </script>
 
 <div class="flex">

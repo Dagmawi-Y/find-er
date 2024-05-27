@@ -233,6 +233,50 @@
         {/each}
       </div>
     {/if}
+    <div class="text-left my-2 w-full">
+      <p class="font-semibold mb-2">Video</p>
+      <div role="tablist" class="tabs tabs-lifted">
+        <input
+          type="radio"
+          name="my_tabs_2"
+          role="tab"
+          class="tab"
+          aria-label="Upload Video"
+          checked
+        />
+        <div
+          role="tabpanel"
+          class="tab-content bg-base-100 border-base-300 rounded-box p-6"
+        >
+          <input
+            type="file"
+            accept="video/*"
+            class="file-input file-input-primary file-input-sm w-full bg-primary-light mb-3"
+            bind:this={videoInput}
+            on:change={handleVideoUpload}
+          />
+          <p class="text-sm text-gray-500">Maximum file size: 50MB</p>
+        </div>
+        <input
+          type="radio"
+          name="my_tabs_2"
+          role="tab"
+          class="tab"
+          aria-label="Youtube Video ID"
+        />
+        <div
+          role="tabpanel"
+          class="tab-content bg-base-100 border-base-300 rounded-box p-6"
+        >
+          <input
+            type="text"
+            placeholder="Youtube video id - Example: YouTube = EKyirtVHsK0"
+            class="input input-bordered w-full mb-3"
+            on:input={handleYoutubeVideoIdInput}
+          />
+        </div>
+      </div>
+    </div>
   </div>
   <div class="divider my-0 py-0" />
   <button

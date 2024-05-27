@@ -3,8 +3,8 @@
   import { page } from "$app/stores";
   import NavBar from "$lib/components/navBar/NavBar.svelte";
   import Footer from "$lib/components/footer/Footer.svelte";
-  import MyPitches from "../me/myPitches/+page.svelte";
-  import MyInvestors from "../me/myInvestors/+page.svelte";
+  import MyPitches from "./myPitches/+page.svelte";
+  import MyInvestors from "./myInvestors/+page.svelte";
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
 
@@ -12,9 +12,11 @@
   let tabContent;
 
   onMount(() => {
-    activeTab = document.querySelector(".tab-active");
-    if (activeTab) {
-      activeTab.classList.add("animate");
+    if (typeof document !== "undefined") {
+      activeTab = document.querySelector(".tab-active");
+      if (activeTab) {
+        activeTab.classList.add("animate");
+      }
     }
   });
 </script>
@@ -66,6 +68,7 @@
     </div>
   </div>
 </div>
+
 <Footer />
 
 <style>

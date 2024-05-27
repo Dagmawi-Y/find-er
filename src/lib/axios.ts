@@ -4,16 +4,18 @@ import axios, {
 } from "axios";
 
 // Get the access token from cookies
-function getAccessTokenFromCookies(): string | null {
+const getAccessTokenFromCookies = (): string | null => {
   const cookies = document.cookie.split(";");
   const accessTokenCookie = cookies.find((cookie) =>
     cookie.trim().startsWith("access_token="),
   );
+
   if (accessTokenCookie) {
     return accessTokenCookie.split("=")[1];
   }
+
   return null;
-}
+};
 
 // Create an instance of axios with a custom request interceptor
 const axiosInstance: AxiosInstance = axios.create({
@@ -24,9 +26,11 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const accessToken = getAccessTokenFromCookies();
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
+
     return config;
   },
   (error) => Promise.reject(error),

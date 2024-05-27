@@ -114,8 +114,8 @@
         </li>
         <li></li>
       </ul>
-      <a href="auth/signIn" class="btn mr-2">Login</a>
-      <a href="auth/signUp" class="btn bg-primary">Signup</a>
+      <a href="/auth/signIn" class="btn mr-2">Login</a>
+      <a href="/auth/signUp" class="btn bg-primary">Signup</a>
     </div>
   </nav>
 {/if}

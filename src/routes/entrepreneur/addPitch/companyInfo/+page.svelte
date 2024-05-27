@@ -34,6 +34,7 @@
       // Store form data in the store
       addStartupFormData.update((data) => {
         data.step1 = {
+          pitchTitle,
           website,
           phoneNumber,
           companyLocation,
