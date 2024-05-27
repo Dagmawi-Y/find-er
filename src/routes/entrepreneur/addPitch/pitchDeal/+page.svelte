@@ -3,33 +3,83 @@
   import HighlightInput from "$lib/components/highlightsInput/HighlightInput.svelte";
   import type { PageData } from "./$types";
   import TagInput from "$lib/components/tagInput/TagInput.svelte";
+  import { goto } from "$app/navigation";
+  import { Toaster, toast } from "svelte-sonner";
+  import { addStartupFormData } from "$lib/stores/addStartupFormData";
 
-  export let data: PageData;
-
-  let form: HTMLFormElement;
+  let website = "";
+  let phoneNumber = "";
 
   let shortSummary = "";
   let theBusiness = "";
   let theMarket = "";
   let progressProof = "";
   let objectivesFuture = "";
-  let highlights = "";
-  let dealType = "";
   let dealDescription = "";
+  let equity = "";
+  let loan = "";
+  let highlights = "";
+
+  let form: HTMLFormElement;
+
+  const handleSubmit = () => {
+    if (form.checkValidity()) {
+      // Store form data in the store
+      addStartupFormData.update((data) => {
+        data.step2 = {
+          shortSummary,
+          theBusiness,
+          theMarket,
+          progressProof,
+          objectivesFuture,
+          dealDescription,
+          equity,
+          loan,
+          highlights: collectHighlights(),
+          dealType: {
+            equity,
+            loan,
+          },
+        };
+        goto("team");
+        return data;
+      });
+
+      // Log the form data
+      console.log($addStartupFormData);
+
+      // Navigate to the next form
+      // You can use the `goto` function from the `$app/navigation` module
+      // or any other method to navigate to the next form
+    } else {
+      form.reportValidity();
+    }
+  };
+  // let form: HTMLFormElement;
 
   const calculateRemainingChars = (value: string, maxLength: number) => {
     return maxLength - value.length;
   };
 
-  const handleSubmit = () => {
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    console.log(data);
-  };
+  function collectHighlights() {
+    const highlights: any = [];
+    const highlightInputs = document.querySelectorAll("#highlight");
+    highlightInputs.forEach((input) => {
+      const highlight = input.value.trim();
+      if (highlight) {
+        highlights.push(highlight);
+        // console.log(highlight);
+      }
+    });
+
+    return highlights.join(", ");
+  }
 </script>
 
+<Toaster richColors />
+
 <div
-  class="flex flex-col items-start w-full max-w-2xl mx-auto justify-between p-0 transition-all duration-1000"
+  class=" flex flex-col items-start w-full max-w-2xl mx-auto justify-between p-0 transition-all duration-1000"
 >
   <h1 class="self-center text-lg font-bold text-primary-dark">
     2. Pitch & Deal
@@ -38,7 +88,6 @@
   <div class="w-full px-4 mt-0">
     <form
       bind:this={form}
-      novalidate
       on:submit|preventDefault={handleSubmit}
       class="text-black"
     >
@@ -56,6 +105,12 @@
           bind:value={shortSummary}
           required
         ></textarea>
+        <!-- {#if shortSummary}
+          <span class="  text-sm text-red-600 text-left"
+            >{shortSummary}</span
+          >
+          {toast.error("Please check all the fields")}
+        {/if} -->
         <Tooltip
           class="bg-primary-light text-black duration-500 max-w-56 text-left "
           trigger="click"
@@ -79,6 +134,12 @@
           bind:value={theBusiness}
           required
         ></textarea>
+        <!-- {#if $errors.theBusiness}
+          <span class="  text-sm text-red-600 text-left"
+            >{$errors.theBusiness}</span
+          >
+          {toast.error("Please check all the fields")}
+        {/if} -->
         <Tooltip
           class="bg-primary-light text-black duration-500 max-w-56 text-left"
           trigger="click"
@@ -104,6 +165,12 @@
           bind:value={theMarket}
           required
         ></textarea>
+        <!-- {#if $errors.theMarket}
+          <span class="  text-sm text-red-600 text-left"
+            >{$errors.theMarket}</span
+          >
+          {toast.error("Please check all the fields")}
+        {/if} -->
         <Tooltip
           class="bg-primary-light text-black duration-500 max-w-80 text-left"
           trigger="click"
@@ -131,6 +198,12 @@
           bind:value={progressProof}
           required
         ></textarea>
+        <!-- {#if $errors.progressProof}
+          <span class="  text-sm text-red-600 text-left"
+            >{$errors.progressProof}</span
+          >
+          {toast.error("Please check all the fields")}
+        {/if} -->
         <Tooltip
           class="bg-primary-light text-black duration-500 max-w-80 text-left"
           trigger="click"
@@ -138,12 +211,13 @@
         >
           “Okay so we know about the business and the market. We now need to
           know about your progress – how’s it actually going so far?<br />
-          Do you have a prototype, finished product or website? Have you received
-          any positive feedback from users or industry experts? What research have
-          you done? Do you have any pre-orders or potential clients lined up? Do
-          you already have any confirmed clients or users? Do you have any social
-          media followers? Have you been featured in the press? Have you won any
-          awards? Do you have patents? Are you generating any revenues yet? Are you
+          Do you have a prototype, finished product or website? <br />Have you
+          received any positive feedback from users or industry experts? What
+          research have you done? <br />Do you have any pre-orders or potential
+          clients lined up? <br />Do you already have any confirmed clients or
+          users? Do you have any social media followers? <br />Have you been
+          featured in the press? Have you won any awards? <br />Do you have
+          patents? Are you generating any revenues yet? <br />Are you
           profitable? Show the investors how great your company is already!”
         </Tooltip>
       </label>
@@ -161,6 +235,12 @@
           bind:value={objectivesFuture}
           required
         ></textarea>
+        <!-- {#if $errors.objectivesFuture}
+          <span class="  text-sm text-red-600 text-left"
+            >{$errors.objectivesFuture}</span
+          >
+          {toast.error("Please check all the fields")}
+        {/if} -->
         <Tooltip
           class="bg-primary-light text-black duration-500 max-w-80 text-left"
           trigger="click"
@@ -209,13 +289,30 @@
             <span class="label-text font-bold mb-2">The Deal</span>
             <div class=" flex gap-3">
               <label class=" label"
-                ><input type="checkbox" checked="checked" class="checkbox" />
+                ><input
+                  name="equity"
+                  type="checkbox"
+                  class=" checkbox"
+                  bind:checked={equity}
+                />
                 <span class="label-text font-semibold mr-1">Equity</span></label
               >
               <label class="label">
-                <input type="checkbox" checked="checked" class="checkbox" />
-                <span class="label-text font-semibold mr-1">Loan</span></label
-              >
+                <input
+                  name="loan"
+                  type="checkbox"
+                  class=" checkbox"
+                  bind:checked={loan}
+                />
+
+                <span class="label-text font-semibold mr-1">Loan</span>
+                <!-- {#if $errors.equity}
+                  <span class="  text-sm text-red-600 text-left"
+                    >{$errors.equity}</span
+                  >
+                  {toast.error("Please check all the fields")}
+                {/if} -->
+              </label>
             </div>
           </div>
 
@@ -227,9 +324,15 @@
           placeholder="Some details about the deal here"
           class="input input-bordered w-full border-none h-24 text-top whitespace-pre-wrap p-2 min-h-20"
           maxlength="450"
-          bind:value={objectivesFuture}
+          bind:value={dealDescription}
           required
         ></textarea>
+        <!-- {#if $errors.dealDescription}
+          <span class="  text-sm text-red-600 text-left"
+            >{$errors.dealDescription}</span
+          >
+          {toast.error("Please check all the fields")}
+        {/if} -->
         <Tooltip
           class="bg-primary-light text-black duration-500 max-w-80 text-left"
           trigger="click"
@@ -254,7 +357,7 @@
       </Tooltip>
       <div class=" divider my-0 py-0"></div>
       <button
-        type="button"
+        type="submit"
         class="btn glass bg-primary w-1/2 mt-3"
         on:click={handleSubmit}>Save & Continue</button
       >

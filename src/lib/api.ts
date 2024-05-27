@@ -269,13 +269,13 @@ export async function updateStartupTeam(startupId: string, data: any) {
   return response.data;
 }
 
-export async function updateStartupDealDetails(startupId: string, data: any) {
-  const response = await axiosInstance.put(
-    `${API_BASE_URL}/startups/${startupId}/deal-details`,
-    data,
-  );
-  return response.data;
-}
+// export async function updateStartupDealDetails(startupId: string, data: any) {
+//   const response = await axiosInstance.put(
+//     `${API_BASE_URL}/startups/${startupId}/deal-details`,
+//     data,
+//   );
+//   return response.data;
+// }
 
 export async function updateStartupPitchDeal(startupId: string, data: any) {
   const response = await axiosInstance.put(

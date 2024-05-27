@@ -3,8 +3,8 @@
   import { page } from "$app/stores";
   import NavBar from "$lib/components/navBar/NavBar.svelte";
   import Footer from "$lib/components/footer/Footer.svelte";
-  import MyPitches from "../entrepreneur/myPitches/+page.svelte";
-  import MyInvestors from "../entrepreneur/myInvestors/+page.svelte";
+  import MyPitches from "../me/myPitches/+page.svelte";
+  import MyInvestors from "../me/myInvestors/+page.svelte";
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
 
@@ -20,44 +20,45 @@
 </script>
 
 <NavBar />
+
 <div class="flex flex-col min-h-screen mx-10">
   <div class="flex-grow">
     <div role="tablist" class="tabs tabs-boxed mt-7 mb-10">
       <a
-        href="/entrepreneur/myPitches"
+        href="/entrepreneur/me/myPitches"
         class="tab tab-lifted"
-        class:tab-active={$page.route.id === "/entrepreneur/myPitches"}
+        class:tab-active={$page.route.id === "/entrepreneur/me/myPitches"}
         aria-label="My Pitches"
       >
         My Pitches
       </a>
       <a
-        href="/entrepreneur/myInvestors"
+        href="/entrepreneur/me/myInvestors"
         class="tab tab-lifted"
-        class:tab-active={$page.route.id === "/entrepreneur/myInvestors"}
+        class:tab-active={$page.route.id === "/entrepreneur/me/myInvestors"}
         aria-label="My Investors"
       >
         My Investors
       </a>
       <a
-        href="/entrepreneur/investorSearch"
+        href="/entrepreneur/me/investorSearch"
         class="tab tab-lifted"
-        class:tab-active={$page.route.id === "/entrepreneur/investorSearch"}
+        class:tab-active={$page.route.id === "/entrepreneur/me/investorSearch"}
         aria-label="Investor Search"
       >
         Investor Search
       </a>
     </div>
     <div class="bg-base-100 border-base-300 rounded-box mt-4">
-      {#if $page.route.id === "/entrepreneur/myPitches"}
+      {#if $page.route.id === "/entrepreneur/me/myPitches"}
         <div transition:slide={{ duration: 300 }} bind:this={tabContent}>
           <MyPitches />
         </div>
-      {:else if $page.route.id === "/entrepreneur/myInvestors"}
+      {:else if $page.route.id === "/entrepreneur/me/myInvestors"}
         <div transition:slide={{ duration: 300 }} bind:this={tabContent}>
           <MyInvestors />
         </div>
-      {:else if $page.route.id === "/entrepreneur/investorSearch"}
+      {:else if $page.route.id === "/entrepreneur/me/investorSearch"}
         <div transition:slide={{ duration: 300 }} bind:this={tabContent}>
           Investor Search
         </div>

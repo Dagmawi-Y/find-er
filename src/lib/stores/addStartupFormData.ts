@@ -7,4 +7,5 @@ export const addStartupFormData = writable({
   step3: {},
   step4: {},
   step5: {},
+  teamMembers: [],
 });

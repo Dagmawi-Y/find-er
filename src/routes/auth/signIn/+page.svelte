@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
   import { Center } from "@svelteuidev/core";
   import MainLogo from "$lib/components/mainLogo/MainLogo.svelte";
   import { loginUser } from "$lib/api";
   import { goto } from "$app/navigation";
   import { writable } from "svelte/store";
+  import { jwtDecode } from "jwt-decode"; // Import jwt-decode library
 
   let email = "";
   let password = "";
@@ -14,12 +15,12 @@
   // Create a writable store to hold the access token
   const accessToken = writable("");
 
-  const validateEmail = (email) => {
+  const validateEmail = (email: any) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
 
     emailError = !validateEmail(email);
@@ -39,8 +40,19 @@
         accessToken.set(response.access_token);
         document.cookie = `access_token=${response.access_token}; path=/`;
 
-        // Redirect to the appropriate route based on user type
-        goto("/entrepreneur");
+        const decodedToken = jwtDecode(response.access_token);
+        // @ts-ignore
+        const userRole = decodedToken.role;
+
+        // Redirect to the appropriate route based on user role
+        if (userRole === "entrepreneur") {
+          goto("/entrepreneur/me/myPitches");
+        } else if (userRole === "investor") {
+          goto("/investor");
+        } else {
+          // Handle other roles or default redirection
+          goto("/");
+        }
       } else {
         // Handle login errors
         console.error("Login failed:", response.message);
@@ -137,7 +149,8 @@
             disabled={formSubmitted}
           >
             {#if formSubmitted}
-              <span class="spinner-border spinner-border-sm" role="status" />
+              <span class="spinner-border spinner-border-sm" role="status"
+              ></span>
               <span class="loading loading-spinner text-secondary"></span>
             {:else}
               Sign In
@@ -146,7 +159,7 @@
           <p class="text-sm font-light text-gray-500">
             Don't have an account yet?
             <a
-              href="/auth/register"
+              href="/auth/signUp"
               class="font-medium text-primary-600 hover:underline">Sign up</a
             >
           </p>

@@ -1,7 +1,11 @@
 <footer class="footer w-full p-10 bg-base-200 text-base-content">
   <div class="h-12 w-12 flex items-center">
     <a href="/" class="flex items-center">
-      <img class="object-fit m-0 p-0" src="images/logo.png" alt="logo" />
+      <img
+        class="object-fit m-0 p-0"
+        src="https://i.ibb.co/bBVsZTy/logo.png"
+        alt="logo"
+      />
       <span class="btn btn-ghost text-m p-1 text-md text-left space-y-20"
         >IdeaSpring <br /> Angel <br /> Network</span
       >

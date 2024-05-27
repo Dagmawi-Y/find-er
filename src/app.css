@@ -4,7 +4,7 @@
 
 @layer utilities {
   .glow-primary {
-    @apply shadow-lg shadow-primary/20;
+    @apply shadow-lg shadow-primary/80;
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;

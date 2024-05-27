@@ -9,6 +9,6 @@
     >
       <span>{number}</span>
     </div>
-    <input type="text" />
+    <input type="text" id="highlight" />
   </label>
 </div>

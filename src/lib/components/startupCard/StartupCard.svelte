@@ -20,7 +20,7 @@
 </script>
 
 <div
-  class="card w-96 bg-base-100 shadow-xl mt-0 mb-10 hover:glow-primary hover:scale-105 transition-all duration-300"
+  class="card w-96 bg-base-100 shadow-xl mt-0 mb-10 hover:glow-primary hover:scale-105 transition-all duration-300 mx-3"
 >
   <figure class="  max-h-32 object-cover">
     <img src={imageUrl} alt="Shoes" />
@@ -32,7 +32,7 @@
       <p>{location}</p>
     </div>
     <div class="divider bg-primary p-0 m-0 h-1/6 border-primary my-1"></div>
-    <p>{description}</p>
+    <p class=" font-normal">{description.slice(0, 100) + "..."}</p>
     <List tag="ol" class="space-y-2 text-xs  my-3  font-bold">
       {#each highlights as highlight}
         <Li>

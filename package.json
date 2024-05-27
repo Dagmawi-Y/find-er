@@ -39,19 +39,25 @@
 		"@svelteuidev/motion": "^0.15.6",
 		"@svelteuidev/preprocessors": "^0.15.6",
 		"@svelteuidev/prism": "^0.15.6",
+		"@types/jwt-decode": "^3.1.0",
 		"@types/nprogress": "^0.2.3",
 		"axios": "^1.7.2",
 		"bits-ui": "^0.21.9",
 		"clsx": "^2.1.1",
 		"dayjs": "^1.11.11",
 		"iconify-icon": "^2.1.0",
+		"jwt-decode": "^4.0.0",
 		"nprogress": "^0.2.0",
 		"radix-icons-svelte": "^1.2.1",
 		"socket.io-client": "^4.7.5",
+		"svelte-awesome-color-picker": "^3.1.0",
+		"svelte-forms-lib": "^2.0.1",
 		"svelte-motion": "^0.12.2",
+		"svelte-sonner": "^0.3.24",
 		"svelte-toasts": "^1.1.2",
 		"svelte-typewriter": "^3.2.3",
 		"tailwind-merge": "^2.3.0",
-		"tailwind-variants": "^0.2.1"
+		"tailwind-variants": "^0.2.1",
+		"vaul-svelte": "^0.3.1"
 	}
 }
