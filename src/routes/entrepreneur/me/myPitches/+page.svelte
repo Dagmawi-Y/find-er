@@ -1,9 +1,9 @@
 <script>
   import AddCard from "$lib/components/addCard/AddCard.svelte";
+  import AddStartupCard from "$lib/components/addCard/AddCard.svelte";
   import StartupCard from "$lib/components/startupCard/StartupCard.svelte";
   import { SimpleGrid } from "@svelteuidev/core";
   import { getUserStartups } from "$lib/api";
-  import { onMount } from "svelte";
 
   /**
    * @type {any[]}
@@ -11,18 +11,16 @@
   let startups = [];
 
   // Fetch startups when the component is mounted
-
   async function fetchStartups() {
     try {
       startups = await getUserStartups();
+      console.log(startups);
     } catch (error) {
       console.error("Error fetching startups:", error);
     }
   }
 
-  onMount(() => {
-    fetchStartups();
-  });
+  fetchStartups();
 </script>
 
 <div class="flex">
@@ -38,6 +36,9 @@
     <AddCard link="/entrepreneur/addPitch/companyInfo" />
     {#each startups as startup}
       <StartupCard
+        id={startup.id}
+        ownerId={startup.user_id}
+        upvotes={startup.upvotes.length}
         imageUrl={startup.images_videos?.find(
           (media) => media.image_url !== null,
         )?.image_url}

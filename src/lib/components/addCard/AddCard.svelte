@@ -6,6 +6,7 @@
   export let link = "";
   export let height = "500px";
   export let width = "w-96";
+  export let bgColor = "";
 
   let card: HTMLElement;
 
@@ -44,7 +45,7 @@
 <div
   bind:this={card}
   class="card flex flex-col items-center justify-center mr-10 border {width} bg-primary-light"
-  style="height: {height};"
+  style="height: {height}; background-color: {bgColor}"
 >
   <p class="font-bold mb-5 px-5 text-center">{text}</p>
   <a href={link} class="transform transition-transform hover:scale-110">

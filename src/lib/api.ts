@@ -118,6 +118,13 @@ export async function updateInvestorCompany(investorId: string, data: any) {
   return response.data;
 }
 
+export async function getInterestedInvestors(startupId: string) {
+  const response = await axiosInstance.get(
+    `${API_BASE_URL}/startups/${startupId}/interested-investors`,
+  );
+  return response.data;
+}
+
 export async function updateInvestorInterests(investorId: string, data: any) {
   const response = await axiosInstance.put(
     `${API_BASE_URL}/investors/${investorId}/interests`,
@@ -253,6 +260,7 @@ export async function deleteStartup(startupId: string) {
 
 export async function getAllStartups() {
   const response = await axiosInstance.get(`${API_BASE_URL}/startups`);
+  console.log({ response });
   return response.data;
 }
 
@@ -271,9 +279,20 @@ export async function expressStartupInterest(startupId: string) {
 //   return response.data;
 // }
 
-export async function addTeamMemberWithImage(data: FormData): Promise<any> {
+export async function addTeamMemberWithImage(data: any): Promise<any> {
   try {
-    const response = await axiosInstance.post("/team-member", data, {
+    const formData = new FormData();
+    formData.append("startupId", data.startupId);
+    formData.append("name", data.name);
+    formData.append("linkedinProfile", data.linkedinProfile);
+    formData.append("position", data.position);
+    formData.append("bio", data.bio);
+    if (data.image) {
+      const file = dataURItoBlob(data.image);
+      formData.append("image", file, "team_member_image.webp");
+    }
+
+    const response = await axiosInstance.post("uploads/team-member", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -283,6 +302,17 @@ export async function addTeamMemberWithImage(data: FormData): Promise<any> {
     console.error("Error uploading team member:", error);
     throw error;
   }
+}
+
+function dataURItoBlob(dataURI: string) {
+  const byteString = atob(dataURI.split(",")[1]);
+  const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
 }
 
 // export async function updateStartupDealDetails(startupId: string, data: any) {
@@ -308,10 +338,24 @@ export async function upvoteStartup(startupId: string) {
   return response.data;
 }
 
+export async function getStartupUpvotes(starupId: string) {
+  const response = await axiosInstance.get(
+    `${API_BASE_URL}/startups/${starupId}/upvotes`,
+  );
+  return response.data;
+}
+
 export async function commentOnStartup(startupId: string, data: any) {
   const response = await axiosInstance.post(
     `${API_BASE_URL}/startups/${startupId}/comment`,
     data,
+  );
+  return response.data;
+}
+
+export async function getCommentsForStartup(startupId: string) {
+  const response = await axiosInstance.get(
+    `${API_BASE_URL}/startups/${startupId}/comments`
   );
   return response.data;
 }
@@ -350,10 +394,16 @@ export async function getShortlistedStartups() {
 }
 
 // Search endpoints
-export async function searchStartups(query: any) {
+export async function searchStartups(query: string) {
   const response = await axiosInstance.get(
-    `${API_BASE_URL}/search/startups`,
-    query,
+    `${API_BASE_URL}/search/startups?query=${encodeURIComponent(query)}`,
+  );
+  return response.data;
+}
+
+export async function searchInvestors(query: string) {
+  const response = await axiosInstance.get(
+    `${API_BASE_URL}/search/investors?query=${encodeURIComponent(query)}`,
   );
   return response.data;
 }
@@ -368,19 +418,45 @@ export async function matchInvestor(investorId: string) {
 
 // Upload endpoints
 export async function uploadStartupVideo(startupId: string, data: any) {
+  const videoBlob = dataURItoBlob(data);
+  const formData = new FormData();
+  formData.append("video", videoBlob);
   const response = await axiosInstance.post(
     `${API_BASE_URL}/uploads/video/${startupId}`,
-    data,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
   );
   return response.data;
 }
 
-export async function uploadStartupImage(startupId: string, data: any) {
-  const response = await axiosInstance.post(
-    `${API_BASE_URL}/uploads/image/${startupId}`,
-    data,
-  );
-  return response.data;
+export async function uploadStartupImage(
+  startupId: string,
+  imageType: string,
+  data: any,
+) {
+  try {
+    const imageBlob = dataURItoBlob(data);
+    const formData = new FormData();
+    formData.append("image", imageBlob, `startup_${imageType}.file`);
+
+    const response = await axiosInstance.post(
+      `${API_BASE_URL}/uploads/image/${startupId}/${imageType}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error uploading startup ${imageType} image:`, error);
+    throw error;
+  }
 }
 
 export async function uploadUserProfileImage(userId: string, data: any) {

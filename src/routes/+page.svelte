@@ -13,8 +13,65 @@
   import Footer from "$lib/components/footer/Footer.svelte";
   import { Splide, SplideSlide } from "@splidejs/svelte-splide";
   import "@splidejs/svelte-splide/css";
-  import { getIndustries } from "$lib/api";
+  import { getIndustries, getAllStartups, getAllInvestors } from "$lib/api";
   import { onMount } from "svelte";
+  import { TypewriterEffectSmooth } from "$lib/components/ui/TypewriterEffect/index";
+  import AddCard from "$lib/components/addCard/AddCard.svelte";
+
+  import { get } from "svelte/store";
+  import { goto } from "$app/navigation";
+  import { userStore } from "$lib/stores/userStore"; // Adjust this import based on your project structure
+  // other imports...
+
+  let user: any;
+
+  userStore.subscribe((value) => {
+    user = value.user;
+  });
+
+  // const words = [
+  //   {
+  //     text: "Build",
+  //   },
+  //   {
+  //     text: "awesome",
+  //   },
+  //   {
+  //     text: "apps",
+  //   },
+  //   {
+  //     text: "with",
+  //   },
+  //   {
+  //     text: "Aceternity.",
+  //     className: "text-blue-500 dark:text-blue-500",
+  //   },
+  // ];
+
+  /**
+   * @type {any[]}
+   */
+  let startups: any = [];
+
+  let investors = [];
+  async function fetchInvestors() {
+    try {
+      investors = await getAllInvestors();
+      console.log(investors);
+    } catch (error) {
+      console.error("Error fetching investors:", error);
+    }
+  }
+
+  // Fetch startups when the component is mounted
+  async function fetchStartups() {
+    try {
+      startups = await getAllStartups();
+      console.log("Fetched startups:", startups); // Log the fetched startups
+    } catch (error) {
+      console.error("Error fetching startups:", error);
+    }
+  }
 
   let selectedOption = "Invest";
   let showAllIndustries = false;
@@ -33,10 +90,13 @@
     try {
       const data = await getIndustries();
       industries = data;
+      fetchStartups();
+      fetchInvestors();
     } catch (error) {
       console.error("Error fetching industries:", error);
     }
   });
+  console.log({ startups });
 </script>
 
 <div>
@@ -50,7 +110,7 @@
       <div class="max-w-md">
         <h1 class="mb-5 text-5xl font-bold">
           <div class="text-primary mb-2">
-            <Typewriter mode="loop" interval={50}>
+            <Typewriter mode="loop" interval={50} class="custom-typewriter">
               <span>Invest In</span>
               <span>Fundraise With</span>
               <span>Help Build</span>
@@ -69,37 +129,60 @@
           to foster their success.
         </p>
         <div class="flex items-center justify-center mb-4">
-          <h2>I'm looking to</h2>
-          <div class="dropdown dropdown-hover">
-            <div
-              tabindex="0"
-              role="button"
-              class="btn custom-btn mx-2 bg-secondary border-none my-2"
-            >
-              {selectedOption}<CaretDownSolid />
+          {#if !user?.isAuthenticated || (user?.role !== "entrepreneur" && user?.role !== "investor" && user?.role !== "engager")}
+            <h2>I'm looking to</h2>
+            <div class="dropdown dropdown-hover">
+              <div
+                tabindex="0"
+                role="button"
+                class="btn custom-btn mx-2 bg-secondary border-none my-2"
+              >
+                {selectedOption}<CaretDownSolid />
+              </div>
+              <ul
+                tabindex="-1"
+                class="dropdown-content z-[1] menu py-2 px-1 shadow bg-secondary rounded-md w-52 ml-2 text-black"
+              >
+                <li>
+                  <a href="/" on:click={() => handleOptionChange("Invest")}
+                    >Invest</a
+                  >
+                </li>
+                <div class="divider my-0"></div>
+                <li>
+                  <a href="/" on:click={() => handleOptionChange("Fundraise")}
+                    >Fundraise</a
+                  >
+                </li>
+              </ul>
             </div>
-            <ul
-              tabindex="-1"
-              class="dropdown-content z-[1] menu py-2 px-1 shadow bg-secondary rounded-md w-52 ml-2 text-black"
-            >
-              <li>
-                <a href="/" on:click={() => handleOptionChange("Invest")}
-                  >Invest</a
-                >
-              </li>
-              <div class=" divider my-0"></div>
-              <li>
-                <a href="/" on:click={() => handleOptionChange("Fundraise")}
-                  >Fundraise</a
-                >
-              </li>
-            </ul>
-          </div>
+          {/if}
         </div>
         <button
           class="btn btn-primary p-0 px-10 hover:glow-primary hover:scale-105 transition-all duration-300 hover:text-white"
-          >Get Started</button
+          on:click={() =>
+            goto(
+              user?.isAuthenticated
+                ? user?.role === "entrepreneur"
+                  ? "/entrepreneur/me/myPitches"
+                  : user?.role === "investor"
+                    ? "/investor/me/myPortfolio"
+                    : user?.role === "engager"
+                      ? "/engager/me/explore"
+                      : "#"
+                : "#",
+            )}
         >
+          {user?.isAuthenticated
+            ? user?.role === "entrepreneur"
+              ? "Get Funded"
+              : user?.role === "investor"
+                ? "Invest"
+                : user?.role === "engager"
+                  ? "Explore"
+                  : "Get Started"
+            : "Get Started"}
+        </button>
       </div>
     </div>
   </div>
@@ -118,20 +201,33 @@
     </Center>
     <div class=" mt-10">
       <Center>
-        <Grid cols={3} align="center" gutter="xl" justify="center">
-          <Grid.Col xs={3} sm={3} md={1} lg={1} xl={1}>
-            <StartupCard />
-            <StartupCard />
-          </Grid.Col>
-          <Grid.Col xs={3} sm={3} md={1} lg={1} xl={1}>
-            <StartupCard />
-            <StartupCard />
-          </Grid.Col>
-          <Grid.Col xs={3} sm={3} md={1} lg={1} xl={1}>
-            <StartupCard />
-            <StartupCard />
-          </Grid.Col>
-        </Grid>
+        <SimpleGrid
+          breakpoints={[
+            { maxWidth: 1240, cols: 2, spacing: "md" },
+            { maxWidth: 980, cols: 2, spacing: "md" },
+            { maxWidth: 755, cols: 1, spacing: "sm" },
+            { maxWidth: 600, cols: 1, spacing: "sm" },
+          ]}
+          cols={3}
+        >
+          {#each startups as startup}
+            <StartupCard
+              id={startup.id}
+              ownerId={startup.user_id}
+              upvotes={startup.upvotes.length}
+              imageUrl={startup.images_videos?.find(
+                (media) => media.image_url !== null,
+              )?.image_url}
+              title={startup.pitch_title}
+              location={startup.location}
+              description={startup.pitch_deal?.short_summary}
+              highlights={startup.pitch_deal?.highlights?.split(", ")}
+              totalRequired={startup.total_raising_amount}
+              minPerInvestor={startup.minimum_investment}
+              currencySymbol="Birr"
+            />
+          {/each}
+        </SimpleGrid>
       </Center>
       <div class=" text-center">
         <p class=" text-lg font-semibold">
@@ -191,20 +287,40 @@
     </Center>
     <div class=" mt-10">
       <Center>
-        <Grid cols={3} align="center" gutter="xl" justify="center">
-          <Grid.Col xs={3} sm={3} md={1} lg={1} xl={1}>
-            <InvestorCard />
-            <InvestorCard />
-          </Grid.Col>
-          <Grid.Col xs={3} sm={3} md={1} lg={1} xl={1}>
-            <InvestorCard />
-            <InvestorCard />
-          </Grid.Col>
-          <Grid.Col xs={3} sm={3} md={1} lg={1} xl={1}>
-            <InvestorCard />
-            <InvestorCard />
-          </Grid.Col>
-        </Grid>
+        <SimpleGrid
+          breakpoints={[
+            { maxWidth: 980, cols: 3, spacing: "md" },
+            { maxWidth: 755, cols: 2, spacing: "sm" },
+            { maxWidth: 600, cols: 1, spacing: "sm" },
+          ]}
+          cols={3}
+        >
+          {#if investors.length === 0}
+            <p>Loading...</p>
+          {:else}
+            {#each investors as investor}
+              <InvestorCard
+                investor={{
+                  name:
+                    investor.investorProfile.first_name +
+                    " " +
+                    investor.investorProfile.last_name,
+                  location: investor.investorProfile.town_city,
+                  profilePicture: investor.investorProfile.profile_image_url,
+                  investmentRange:
+                    investor.investorInterests.investment_criteria,
+                  bio: investor.investorProfile.about_me,
+                  areasOfExpertise:
+                    investor.investorInterests.areas_of_expertise,
+                  minimumInvestment:
+                    investor.investorProfile.minimum_investment,
+                  maximumInvestment:
+                    investor.investorProfile.maximum_investment,
+                }}
+              />
+            {/each}
+          {/if}
+        </SimpleGrid>
       </Center>
     </div>
   </div>
@@ -310,6 +426,12 @@
 </div>
 
 <style>
+  .custom-typewriter {
+    --cursor-width: 1px; /* Adjust the value as needed */
+  }
+  body {
+    background-color: rgb(242, 242, 242);
+  }
   @keyframes gradient-x {
     0%,
     100% {

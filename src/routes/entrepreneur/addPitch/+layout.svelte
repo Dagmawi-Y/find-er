@@ -91,7 +91,7 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.25); /* Adjust the opacity here */
+    background-color: rgba(0, 0, 0, 0.35); /* Adjust the opacity here */
     z-index: -1;
   }
 </style>

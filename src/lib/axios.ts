@@ -4,6 +4,8 @@ import axios, {
 } from "axios";
 
 // Get the access token from cookies
+let userId;
+
 const getAccessTokenFromCookies = (): string | null => {
   const cookies = document.cookie.split(";");
   const accessTokenCookie = cookies.find((cookie) =>

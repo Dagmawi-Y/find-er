@@ -101,7 +101,7 @@
         <textarea
           placeholder="Short Summary"
           class="input input-bordered w-full border-none h-24 text-top whitespace-pre-wrap p-2 min-h-20"
-          maxlength="450"
+          maxlength="5000"
           bind:value={shortSummary}
           required
         ></textarea>
@@ -130,7 +130,7 @@
         <textarea
           placeholder="The Business"
           class="input input-bordered w-full border-none h-24 text-top whitespace-pre-wrap p-2 min-h-20"
-          maxlength="450"
+          maxlength="5000"
           bind:value={theBusiness}
           required
         ></textarea>
@@ -161,7 +161,7 @@
         <textarea
           placeholder="The Business"
           class="input input-bordered w-full border-none h-24 text-top whitespace-pre-wrap p-2 min-h-20"
-          maxlength="450"
+          maxlength="5000"
           bind:value={theMarket}
           required
         ></textarea>
@@ -194,7 +194,7 @@
         <textarea
           placeholder="The Business"
           class="input input-bordered w-full border-none h-24 text-top whitespace-pre-wrap p-2 min-h-20"
-          maxlength="450"
+          maxlength="5000"
           bind:value={progressProof}
           required
         ></textarea>
@@ -231,7 +231,7 @@
         <textarea
           placeholder="The Business"
           class="input input-bordered w-full border-none h-24 text-top whitespace-pre-wrap p-2 min-h-20"
-          maxlength="450"
+          maxlength="5000"
           bind:value={objectivesFuture}
           required
         ></textarea>
@@ -323,7 +323,7 @@
         <textarea
           placeholder="Some details about the deal here"
           class="input input-bordered w-full border-none h-24 text-top whitespace-pre-wrap p-2 min-h-20"
-          maxlength="450"
+          maxlength="5000"
           bind:value={dealDescription}
           required
         ></textarea>

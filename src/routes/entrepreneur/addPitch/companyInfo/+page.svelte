@@ -93,7 +93,7 @@
           placeholder="Type here"
           class="input input-bordered w-full border-none"
           required
-          maxlength="50"
+          maxlength="2000"
           bind:value={pitchTitle}
         />
         <Tooltip

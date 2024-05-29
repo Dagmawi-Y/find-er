@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { searchStartups, getAllStartups, searchInvestors } from "$lib/api";
+  import { searchStartups, getAllStartups } from "$lib/api";
   import StartupCard from "$lib/components/startupCard/StartupCard.svelte";
-  import InvestorCard from "$lib/components/investorCard/InvestorCard.svelte";
   import { onMount } from "svelte";
   import { Circle } from "svelte-loading-spinners";
   import { Toaster, toast } from "svelte-sonner";
@@ -12,28 +11,6 @@
   let startups: any[] = [];
   let debounceTimeout: NodeJS.Timeout;
 
-  // async function handleSearch() {
-  //   if (
-  //     isSearching ||
-  //     (searchQuery.trim() === "" && searchResults.length === 0)
-  //   ) {
-  //     return;
-  //   }
-
-  //   try {
-  //     isSearching = true;
-  //     searchResults = await searchStartups(searchQuery);
-  //     console.log({ searchResults });
-  //     if (searchQuery.trim() === "" && searchResults.length === 0) {
-  //       // toast.info("Search Here");
-  //     }
-  //   } catch (error) {
-  //     toast.error("Something went wrong.");
-  //     console.error("Error searching for startups:", error);
-  //   } finally {
-  //     isSearching = false;
-  //   }
-  // }
   async function handleSearch() {
     if (
       isSearching ||
@@ -44,14 +21,14 @@
 
     try {
       isSearching = true;
-      searchResults = await searchInvestors(searchQuery);
+      searchResults = await searchStartups(searchQuery);
       console.log({ searchResults });
       if (searchQuery.trim() === "" && searchResults.length === 0) {
         // toast.info("Search Here");
       }
     } catch (error) {
       toast.error("Something went wrong.");
-      console.error("Error searching for investors:", error);
+      console.error("Error searching for startups:", error);
     } finally {
       isSearching = false;
     }
@@ -106,21 +83,19 @@
 
 {#if searchResults.length > 0}
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-7">
-    {#each searchResults as investor}
-    {#each searchResults as investor}
-    <InvestorCard
-      investor={{
-        name: `${investor.investorProfile.first_name} ${investor.investorProfile.last_name}`,
-        location: `${investor.investorProfile.town_city}, ${investor.investorProfile.country}`,
-        profilePicture: investor.investorProfile.profile_image_url,
-        investmentRange: `${investor.investorProfile.minimum_investment} - ${investor.investorProfile.maximum_investment}`,
-        bio: investor.investorProfile.about_me,
-        areasOfExpertise: [investor.investorInterests.areas_of_expertise],
-        minimumInvestment: investor.investorProfile.minimum_investment,
-        maximumInvestment: investor.investorProfile.maximum_investment,
-      }}
-    />
-  {/each}
+    {#each searchResults as startup}
+      <StartupCard
+        id={startup.id}
+        upvotes={startup.upvotes.length}
+        imageUrl={startup.imageUrl}
+        title={startup.pitch_title}
+        location={startup.location}
+        description={startup.description}
+        highlights={startup.highlights}
+        totalRequired={startup.total_raising_amount}
+        minPerInvestor={startup.minimum_investment}
+        currencySymbol={startup.currencySymbol}
+      />
     {/each}
   </div>
 {:else}

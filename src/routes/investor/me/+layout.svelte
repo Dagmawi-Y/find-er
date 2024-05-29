@@ -3,11 +3,12 @@
   import { page } from "$app/stores";
   import NavBar from "$lib/components/navBar/NavBar.svelte";
   import Footer from "$lib/components/footer/Footer.svelte";
-  import MyPitches from "./myPitches/+page.svelte";
-  import MyInvestors from "./myInvestors/+page.svelte";
+  import MyPortfolio from "../portfolio/[id]/+page.svelte";
+  import MyMatches from "./myMatches/+page.svelte";
+  import Explore from "./explore/+page.svelte";
+  import Search from "./search/+page.svelte";
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
-  import InvestorSearch from "./investorSearch/+page.svelte";
 
   let activeTab;
   let tabContent;
@@ -31,46 +32,58 @@
       class="tabs tabs-boxed mt-7 mb-10 font-bold border-t-2 border-primary-light"
     >
       <a
-        href="/entrepreneur/me/myPitches"
+        href="/investor/me/myPortfolio"
         class="tab tab-lifted"
-        class:tab-active={$page.route.id === "/entrepreneur/me/myPitches"}
+        class:tab-active={$page.route.id === "/investor/me/myPortfolio"}
         aria-label="My Pitches"
       >
-        My Pitches
+        My Portfolio
       </a>
       <a
-        href="/entrepreneur/me/myInvestors"
+        href="/investor/me/myMatches"
         class="tab tab-lifted"
-        class:tab-active={$page.route.id === "/entrepreneur/me/myInvestors"}
+        class:tab-active={$page.route.id === "/investor/me/myMatches"}
         aria-label="My Investors"
       >
-        My Investors
+        My Matches
       </a>
       <a
-        href="/entrepreneur/me/investorSearch"
+        href="/investor/me/explore"
         class="tab tab-lifted"
-        class:tab-active={$page.route.id === "/entrepreneur/me/investorSearch"}
+        class:tab-active={$page.route.id === "/investor/me/explore"}
         aria-label="Investor Search"
       >
-        Investor Search
+        Explore
+      </a>
+      <a
+        href="/investor/me/search"
+        class="tab tab-lifted"
+        class:tab-active={$page.route.id === "/investor/me/search"}
+        aria-label="Investor Search"
+      >
+        Search
       </a>
     </div>
     <div class="bg-base-100 border-base-300 rounded-box py-5 px-5">
-      {#if $page.route.id === "/entrepreneur/me/myPitches"}
+      {#if $page.route.id === "/investor/me/myPortfolio"}
         <div transition:slide={{ duration: 300 }} bind:this={tabContent}>
-          <MyPitches />
+          <MyPortfolio />
         </div>
-      {:else if $page.route.id === "/entrepreneur/me/myInvestors"}
+      {:else if $page.route.id === "/investor/me/myMatches"}
         <div transition:slide={{ duration: 300 }} bind:this={tabContent}>
-          <MyInvestors />
+          <MyMatches />
         </div>
-      {:else if $page.route.id === "/entrepreneur/me/investorSearch"}
+      {:else if $page.route.id === "/investor/me/explore"}
         <div transition:slide={{ duration: 300 }} bind:this={tabContent}>
-          <InvestorSearch />
+          <Explore />
+        </div>
+      {:else if $page.route.id === "/investor/me/search"}
+        <div transition:slide={{ duration: 300 }} bind:this={tabContent}>
+          <Search />
         </div>
       {/if}
     </div>
-    <!-- <slot /> -->
+    <slot />
   </div>
 </div>
 
