@@ -6,12 +6,15 @@
   import { logoutUser } from "$lib/api";
   import { goto } from "$app/navigation";
   import { writable } from "svelte/store";
+  import { getUserProfile } from "$lib/api";
+  import { onMount } from "svelte";
 
   let isSticky = true;
   let isAuthenticated = false;
   let userRole = "";
   let showLogoutConfirm = false;
   let loading = true;
+  let currentUser: any;
 
   // Subscribe to user store to get the latest authentication status and role
   userStore.subscribe((state) => {
@@ -50,6 +53,24 @@
       console.error("Logout failed:", error);
     }
   }
+
+  function getAccountSettingsRoute(userRole: string) {
+    switch (userRole) {
+      case "entrepreneur":
+        return "/entrepreneur/accountSettings";
+      case "investor":
+        return "/investor/accountSettings";
+      case "engager":
+        return "/engager/accountSettings";
+      default:
+        return "/";
+    }
+  }
+
+  onMount(async () => {
+    currentUser = await getUserProfile();
+    console.log({ currentUser });
+  });
 </script>
 
 <svelte:window on:scroll={handleScroll} />
@@ -81,10 +102,10 @@
           tabIndex={0}
           class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
         >
-          {#if userRole !== "entrepreneur"}
+          {#if isAuthenticated && userRole !== "entrepreneur"}
             <li><a>Invest</a></li>
           {/if}
-          {#if userRole !== "investor"}
+          {#if isAuthenticated && userRole !== "investor"}
             <li>
               <a>Fundraise</a>
               <ul class="p-2">
@@ -108,7 +129,7 @@
     <div class="navbar-end hidden lg:flex w-full">
       {#if !loading}
         <ul class="menu menu-horizontal px-1">
-          {#if userRole !== "entrepreneur"}
+          {#if isAuthenticated && userRole !== "entrepreneur"}
             <li>
               <details>
                 <summary>
@@ -129,7 +150,7 @@
               </details>
             </li>
           {/if}
-          {#if userRole !== "investor"}
+          {#if isAuthenticated && userRole !== "investor"}
             <li>
               <details>
                 <summary>
@@ -183,17 +204,26 @@
             >
               <div class="avatar">
                 <div class="w-9 rounded-full">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                    alt="Tailwind-CSS-Avatar-component"
-                  />
+                  {#if currentUser}
+                    <img
+                      src={currentUser.profile_image_url}
+                      alt="Tailwind-CSS-Avatar-component"
+                    />
+                  {:else}
+                    <img
+                      src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                      alt="Tailwind-CSS-Avatar-component"
+                    />
+                  {/if}
                 </div>
               </div>
             </summary>
             <ul
               class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-fit"
             >
-              <li><a>Account Settings</a></li>
+              <li>
+                <a href={getAccountSettingsRoute(userRole)}>Account Settings</a>
+              </li>
               <li><a>Alerts</a></li>
               <li>
                 <button class="" on:click={showLogoutPopup}>Logout</button>

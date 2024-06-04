@@ -83,7 +83,7 @@
         </div>
       {/if}
     </div>
-    <slot />
+    <!-- <slot /> -->
   </div>
 </div>
 

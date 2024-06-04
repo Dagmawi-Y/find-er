@@ -144,13 +144,16 @@
                 class="dropdown-content z-[1] menu py-2 px-1 shadow bg-secondary rounded-md w-52 ml-2 text-black"
               >
                 <li>
-                  <a href="/" on:click={() => handleOptionChange("Invest")}
-                    >Invest</a
+                  <a
+                    href="/auth/signUp"
+                    on:click={() => handleOptionChange("Invest")}>Invest</a
                   >
                 </li>
                 <div class="divider my-0"></div>
                 <li>
-                  <a href="/" on:click={() => handleOptionChange("Fundraise")}
+                  <a
+                    href="/auth/signUp"
+                    on:click={() => handleOptionChange("Fundraise")}
                     >Fundraise</a
                   >
                 </li>
@@ -161,17 +164,17 @@
         <button
           class="btn btn-primary p-0 px-10 hover:glow-primary hover:scale-105 transition-all duration-300 hover:text-white"
           on:click={() =>
-            goto(
-              user?.isAuthenticated
-                ? user?.role === "entrepreneur"
-                  ? "/entrepreneur/me/myPitches"
-                  : user?.role === "investor"
-                    ? "/investor/me/myPortfolio"
-                    : user?.role === "engager"
-                      ? "/engager/me/explore"
-                      : "#"
-                : "#",
-            )}
+            user?.isAuthenticated
+              ? goto(
+                  user.role === "entrepreneur"
+                    ? "/entrepreneur/me/myPitches"
+                    : user.role === "investor"
+                      ? "/investor/me/myPortfolio"
+                      : user.role === "engager"
+                        ? "/engager/me/explore"
+                        : "#",
+                )
+              : goto("/auth/signUp")}
         >
           {user?.isAuthenticated
             ? user?.role === "entrepreneur"
@@ -333,7 +336,7 @@
       </p>
     </div>
   </Center>
-  <Center>
+  <Center class=" mb-5">
     <SimpleGrid
       breakpoints={[
         { maxWidth: 980, cols: 3, spacing: "md" },
@@ -358,14 +361,16 @@
       {/each}
     </SimpleGrid>
   </Center>
-  <Center>
-    <button
-      class="btn btn-primary mt-6 transition-all duration-300 hover:scale-105 my-4"
-      on:click={toggleIndustries}
-    >
-      {showAllIndustries ? "Show Less" : "See More Industries"}
-    </button>
-  </Center>
+  {#if industries.length > 6}
+    <Center>
+      <button
+        class="btn btn-primary mt-6 transition-all duration-300 hover:scale-105 my-4"
+        on:click={toggleIndustries}
+      >
+        {showAllIndustries ? "Show Less" : "See More Industries"}
+      </button>
+    </Center>
+  {/if}
 
   <div class=" bg-slate-200 py-10">
     <Center>
