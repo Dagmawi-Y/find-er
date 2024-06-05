@@ -69,6 +69,20 @@ export async function updateUserProfile(userData: any) {
   return response.data;
 }
 
+export async function changeUserPassword(
+  currentPassword: string,
+  newPassword: string,
+) {
+  const response = await axiosInstance.put(
+    `${API_BASE_URL}/users/change-password`,
+    {
+      currentPassword,
+      newPassword,
+    },
+  );
+  return response.data;
+}
+
 export async function deleteUserProfile() {
   const response = await axiosInstance.delete(`${API_BASE_URL}/users/profile`);
   return response.data;
@@ -76,9 +90,15 @@ export async function deleteUserProfile() {
 
 // Investor endpoints
 
+export async function shortlistInvestor(investorId: string) {
+  const response = await axiosInstance.post(
+    `${API_BASE_URL}/entrepreneur/${investorId}/shortlist`,
+  );
+  return response.data;
+}
 export async function getShortlistedInvestors() {
   const response = await axiosInstance.get(
-    `${API_BASE_URL}/investors/shortlisted`,
+    `${API_BASE_URL}/entrepreneur/shortlisted-investors`,
   );
   return response.data;
 }
@@ -86,13 +106,6 @@ export async function getShortlistedInvestors() {
 export async function getInvestorById(investorId: string) {
   const response = await axiosInstance.get(
     `${API_BASE_URL}/investors/${investorId}`,
-  );
-  return response.data;
-}
-
-export async function shortlistInvestor(investorId: string) {
-  const response = await axiosInstance.post(
-    `${API_BASE_URL}/investors/${investorId}/shortlist`,
   );
   return response.data;
 }
@@ -355,7 +368,7 @@ export async function commentOnStartup(startupId: string, data: any) {
 
 export async function getCommentsForStartup(startupId: string) {
   const response = await axiosInstance.get(
-    `${API_BASE_URL}/startups/${startupId}/comments`
+    `${API_BASE_URL}/startups/${startupId}/comments`,
   );
   return response.data;
 }

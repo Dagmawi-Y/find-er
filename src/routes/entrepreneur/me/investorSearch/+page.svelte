@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { searchStartups, getAllStartups, searchInvestors } from "$lib/api";
+  import {
+    searchStartups,
+    getAllStartups,
+    searchInvestors,
+    getAllInvestors,
+  } from "$lib/api";
   import StartupCard from "$lib/components/startupCard/StartupCard.svelte";
   import InvestorCard from "$lib/components/investorCard/InvestorCard.svelte";
   import { onMount } from "svelte";
@@ -9,31 +14,19 @@
   let isSearching = false;
   let searchQuery = "";
   let searchResults: any[] = [];
-  let startups: any[] = [];
+  let allInvestors: any[] = [];
   let debounceTimeout: NodeJS.Timeout;
 
-  // async function handleSearch() {
-  //   if (
-  //     isSearching ||
-  //     (searchQuery.trim() === "" && searchResults.length === 0)
-  //   ) {
-  //     return;
-  //   }
+  async function fetchAllInvestors() {
+    try {
+      allInvestors = (await getAllInvestors()).sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      );
+    } catch (error) {
+      console.error("Error fetching all investors:", error);
+    }
+  }
 
-  //   try {
-  //     isSearching = true;
-  //     searchResults = await searchStartups(searchQuery);
-  //     console.log({ searchResults });
-  //     if (searchQuery.trim() === "" && searchResults.length === 0) {
-  //       // toast.info("Search Here");
-  //     }
-  //   } catch (error) {
-  //     toast.error("Something went wrong.");
-  //     console.error("Error searching for startups:", error);
-  //   } finally {
-  //     isSearching = false;
-  //   }
-  // }
   async function handleSearch() {
     if (
       isSearching ||
@@ -44,11 +37,10 @@
 
     try {
       isSearching = true;
-      searchResults = await searchInvestors(searchQuery);
+      searchResults = (await searchInvestors(searchQuery)).sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      );
       console.log({ searchResults });
-      if (searchQuery.trim() === "" && searchResults.length === 0) {
-        // toast.info("Search Here");
-      }
     } catch (error) {
       toast.error("Something went wrong.");
       console.error("Error searching for investors:", error);
@@ -62,10 +54,23 @@
     debounceTimeout = setTimeout(() => {
       if (searchQuery.length >= 3) {
         handleSearch();
+      } else {
+        searchResults = []; // Clear search results if input is less than 3 characters
       }
     }, 2000);
   }
+
+  // Clear search results when the input is cleared
+  $: if (searchQuery === "") {
+    searchResults = [];
+  }
+
+  onMount(() => {
+    fetchAllInvestors();
+  });
 </script>
+
+<!-- ... (rest of the code remains the same) -->
 
 <Toaster richColors position="top-center" />
 
@@ -76,7 +81,7 @@
         <input
           type="text"
           class="w-full"
-          placeholder="Search"
+          placeholder="Search Investors"
           bind:value={searchQuery}
           on:input={debounceSearch}
         />
@@ -104,25 +109,39 @@
   </div>
 </div>
 
-{#if searchResults.length > 0}
+{#if searchQuery.trim() === ""}
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-7">
-    {#each searchResults as investor}
-    {#each searchResults as investor}
-    <InvestorCard
-      investor={{
-        name: `${investor.investorProfile.first_name} ${investor.investorProfile.last_name}`,
-        location: `${investor.investorProfile.town_city}, ${investor.investorProfile.country}`,
-        profilePicture: investor.investorProfile.profile_image_url,
-        investmentRange: `${investor.investorProfile.minimum_investment} - ${investor.investorProfile.maximum_investment}`,
-        bio: investor.investorProfile.about_me,
-        areasOfExpertise: [investor.investorInterests.areas_of_expertise],
-        minimumInvestment: investor.investorProfile.minimum_investment,
-        maximumInvestment: investor.investorProfile.maximum_investment,
-      }}
-    />
-  {/each}
+    {#each allInvestors as investor}
+      <InvestorCard
+        investor={{
+          id: investor.id,
+          name: `${investor.investorProfile.first_name} ${investor.investorProfile.last_name}`,
+          location: `${investor.investorProfile.town_city}, ${investor.investorProfile.country}`,
+          profilePicture: investor.investorProfile.profile_image_url,
+          investmentRange: `${investor.investorProfile.minimum_investment} - ${investor.investorProfile.maximum_investment}`,
+          bio: investor.investorProfile.about_me,
+          areasOfExpertise: [investor.investorInterests.areas_of_expertise],
+          minimumInvestment: investor.investorProfile.minimum_investment,
+          maximumInvestment: investor.investorProfile.maximum_investment,
+        }}
+      />
     {/each}
   </div>
-{:else}
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-7"></div>
+{:else if searchResults.length > 0}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-7">
+    {#each searchResults as investor}
+      <InvestorCard
+        investor={{
+          name: `${investor.investorProfile.first_name} ${investor.investorProfile.last_name}`,
+          location: `${investor.investorProfile.town_city}, ${investor.investorProfile.country}`,
+          profilePicture: investor.investorProfile.profile_image_url,
+          investmentRange: `${investor.investorProfile.minimum_investment} - ${investor.investorProfile.maximum_investment}`,
+          bio: investor.investorProfile.about_me,
+          areasOfExpertise: [investor.investorInterests.areas_of_expertise],
+          minimumInvestment: investor.investorProfile.minimum_investment,
+          maximumInvestment: investor.investorProfile.maximum_investment,
+        }}
+      />
+    {/each}
+  </div>
 {/if}

@@ -110,7 +110,7 @@
       <div class="max-w-md">
         <h1 class="mb-5 text-5xl font-bold">
           <div class="text-primary mb-2">
-            <Typewriter mode="loop" interval={50} class="custom-typewriter">
+            <Typewriter mode="loop" interval={50}>
               <span>Invest In</span>
               <span>Fundraise With</span>
               <span>Help Build</span>
@@ -304,6 +304,7 @@
             {#each investors as investor}
               <InvestorCard
                 investor={{
+                  id: investor.id,
                   name:
                     investor.investorProfile.first_name +
                     " " +

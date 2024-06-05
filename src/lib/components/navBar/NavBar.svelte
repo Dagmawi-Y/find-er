@@ -38,17 +38,25 @@
 
   async function handleLogout() {
     try {
-      await logoutUser();
+      // Perform logout logic here
+      logoutUser();
       userStore.set({
         user: { isAuthenticated: false, role: "", id: 0 },
         loading: false,
       });
-      // Clear the user from localStorage if typeof sessionStorage !== "undefined"
       if (typeof sessionStorage !== "undefined") {
-        localStorage.removeItem("user");
+        sessionStorage.clear();
       }
-      showLogoutConfirm = false;
-      goto("/");
+      if (typeof localStorage !== "undefined") {
+        localStorage.clear();
+      }
+      // Clear cookies
+      document.cookie.split(";").forEach(function (c) {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+      window.location.href = "/";
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -205,14 +213,11 @@
               <div class="avatar">
                 <div class="w-9 rounded-full">
                   {#if currentUser}
-                    <img
-                      src={currentUser.profile_image_url}
-                      alt="Tailwind-CSS-Avatar-component"
-                    />
+                    <img src={currentUser.profile_image_url} alt="Profile" />
                   {:else}
                     <img
                       src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                      alt="Tailwind-CSS-Avatar-component"
+                      alt="Profile"
                     />
                   {/if}
                 </div>
